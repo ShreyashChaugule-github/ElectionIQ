@@ -4,7 +4,7 @@ import { getAuth } from "firebase/auth";
 import { getAnalytics } from "firebase/analytics";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDJiStxcKJN-8JLFQ27r7asOb2lsfLFhnQ",
+  apiKey: "VITE_FIREBASE_API_KEY",
   authDomain: "pw-challenge-2-494710.firebaseapp.com",
   projectId: "pw-challenge-2-494710",
   storageBucket: "pw-challenge-2-494710.firebasestorage.app",

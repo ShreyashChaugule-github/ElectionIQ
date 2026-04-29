@@ -14,21 +14,19 @@ import {
   STATS 
 } from './data/electionData.js';
 
+import { useAuth } from './hooks/useAuth';
+import LandingPage from './pages/LandingPage';
+
 const TABS = ['Dashboard', 'Process', 'AI Assistant', 'Quiz'];
 
 function App() {
+  const { user, loading: authLoading, authError, loginWithGoogle, logout } = useAuth();
   const [activeTab, setActiveTab] = useState(0);
   const [language, setLanguage] = useState('en');
   const [showModal, setShowModal] = useState(false);
   const [modalTitle, setModalTitle] = useState('');
   const [modalData, setModalData] = useState([]);
-  const [apiConnected, setApiConnected] = useState(false);
-  const [userApiKey, setUserApiKey] = useState('');
   
-  // Modals
-  const [apiModalOpen, setApiModalOpen] = useState(false);
-  const [modalError, setModalError] = useState('');
-
   // Roadmap logic
   const handleRoadmap = (formType = 'First Vote') => {
     if (formType === 'First Vote') {
@@ -65,42 +63,27 @@ function App() {
     }
   }, []);
 
-  const handleConnect = () => {
-    setModalError('');
-    setApiModalOpen(true);
-  };
-
-  const saveApiKey = () => {
-    const key = userApiKey.trim();
-    if (!/^AIza[A-Za-z0-9_-]{35,}$/.test(key)) {
-      setModalError('Invalid key format. Gemini keys start with "AIza" followed by 35+ characters.');
-      return;
-    }
-    setApiConnected(true);
-    setApiModalOpen(false);
-    setModalError('');
-  };
-
   const handleChatSubmit = async (customPrompt) => {
     const prompt = customPrompt?.trim() ?? chatInput.trim();
     if (!prompt || chatLoading) return;
-
-    if (!apiConnected) {
-      setApiModalOpen(true);
-      return;
-    }
 
     setChatInput('');
     setChatLoading(true);
     setChatMessages((prev) => [...prev, { role: 'user', text: prompt }]);
 
     try {
+      const headers = { 
+        'Content-Type': 'application/json',
+      };
+      
+      if (user) {
+        const token = await user.getIdToken();
+        headers['Authorization'] = `Bearer ${token}`;
+      }
+
       const response = await fetch('/api/ai', {
         method: 'POST',
-        headers: { 
-          'Content-Type': 'application/json',
-          'x-gemini-api-key': userApiKey 
-        },
+        headers,
         body: JSON.stringify({ 
           prompt, 
           language: LANGUAGE_LABELS[language] 
@@ -126,13 +109,40 @@ function App() {
     handleChatSubmit(prompt);
   };
 
+  // Show blank loading screen while Firebase checks auth state
+  if (authLoading) {
+    return (
+      <div className="auth-init-screen">
+        <div className="auth-init-logo">
+          <svg viewBox="0 0 14 14" fill="none" width="40" height="40">
+            <path d="M7 1.5L11 4.5V9.5L7 12.5L3 9.5V4.5L7 1.5Z" stroke="#7EA8E8" strokeWidth="1.2" fill="none" />
+            <circle cx="7" cy="7" r="2" fill="#7EA8E8" />
+          </svg>
+        </div>
+        <div className="auth-init-spinner" />
+        <p className="auth-init-text">ElectionIQ</p>
+      </div>
+    );
+  }
+
+  // Show landing page if not logged in
+  if (!user) {
+    return <LandingPage onLogin={loginWithGoogle} loading={authLoading} />;
+  }
+
   return (
     <div className="app">
+      {authError && (
+        <div className="auth-error-banner">
+          ⚠️ {authError}
+        </div>
+      )}
       <Topbar 
         language={language} 
         setLanguage={setLanguage} 
-        apiConnected={apiConnected} 
-        handleConnect={handleConnect} 
+        user={user}
+        login={loginWithGoogle}
+        logout={logout}
       />
 
       <nav className="tabs" role="tablist">
@@ -203,33 +213,6 @@ function App() {
           {activeTab === 3 && <Quiz />}
         </div>
       </main>
-
-      {/* API Key Modal */}
-      <Modal
-        isOpen={apiModalOpen}
-        onClose={() => setApiModalOpen(false)}
-        title="Connect Gemini AI"
-        footer={
-          <div className="modal-btns">
-            <button className="mbtn" onClick={() => setApiModalOpen(false)}>Cancel</button>
-            <button className="mbtn primary" onClick={saveApiKey}>Connect</button>
-          </div>
-        }
-      >
-        <p className="modal-sub">Enter your Google Gemini API key to enable AI responses. Stored in session only — never sent to any server except as a proxy header.</p>
-        <input
-          type="password"
-          className="modal-inp"
-          placeholder="AIza…"
-          value={userApiKey}
-          onChange={(e) => setUserApiKey(e.target.value)}
-          aria-label="Gemini API Key"
-        />
-        <div className="modal-hint">
-          Get a free key at <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener noreferrer">aistudio.google.com</a>
-        </div>
-        {modalError && <div className="modal-err" role="alert">{modalError}</div>}
-      </Modal>
 
       {/* Roadmap Modal */}
       <Modal

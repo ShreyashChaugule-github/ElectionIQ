@@ -1,7 +1,7 @@
 import React from 'react';
 import { LANGUAGE_OPTIONS } from '../data/electionData.js';
 
-function Topbar({ language, setLanguage, apiConnected, handleConnect }) {
+function Topbar({ language, setLanguage, user, login, logout }) {
   return (
     <header className="topbar">
       <div className="brand">
@@ -12,7 +12,7 @@ function Topbar({ language, setLanguage, apiConnected, handleConnect }) {
           </svg>
         </div>
         <span className="brand-name">ElectionIQ</span>
-        <span className="brand-sub">built on Gemini</span>
+        <span className="brand-sub">Modern Democracy</span>
       </div>
 
       <div className="topbar-right">
@@ -29,18 +29,20 @@ function Topbar({ language, setLanguage, apiConnected, handleConnect }) {
             </option>
           ))}
         </select>
-        <button
-          id="apiBtn"
-          className={`api-btn ${apiConnected ? 'on' : 'off'}`}
-          onClick={handleConnect}
-          type="button"
-          aria-label={apiConnected ? "Gemini API Connected" : "Connect Gemini API"}
-        >
-          {apiConnected ? '✓ Gemini Connected' : '⚙ Connect API'}
-        </button>
+
+        {user ? (
+          <div className="user-profile">
+            {user.photoURL && <img src={user.photoURL} alt={user.displayName} className="user-avatar" />}
+            <span className="user-name">{user.displayName || 'User'}</span>
+            <button type="button" className="auth-btn logout" onClick={() => logout()}>Logout</button>
+          </div>
+        ) : (
+          <button type="button" className="auth-btn login" onClick={() => login()}>Login</button>
+        )}
       </div>
     </header>
   );
 }
+
 
 export default Topbar;

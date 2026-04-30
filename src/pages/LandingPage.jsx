@@ -34,11 +34,31 @@ const stats = [
   { value: '100%', label: 'Free to Use' },
 ];
 
-export default function LandingPage({ onLogin, loading }) {
+export default function LandingPage({ onLogin, loading, authError }) {
   const [hovered, setHovered] = useState(null);
 
+  const handlePointerMove = (event) => {
+    const rect = event.currentTarget.getBoundingClientRect();
+    const x = ((event.clientX - rect.left) / rect.width) * 100;
+    const y = ((event.clientY - rect.top) / rect.height) * 100;
+    event.currentTarget.style.setProperty('--pointer-x', `${x}%`);
+    event.currentTarget.style.setProperty('--pointer-y', `${y}%`);
+  };
+
   return (
-    <div className="landing">
+    <div className="landing" onMouseMove={handlePointerMove}>
+      <div className="landing-motion">
+        <div className="motion-badge motion-badge-1">🗳️</div>
+        <div className="motion-badge motion-badge-2">🇮🇳</div>
+        <div className="motion-badge motion-badge-3">📊</div>
+        <div className="motion-badge motion-badge-4">👥</div>
+        <div className="motion-badge motion-badge-5">🏛️</div>
+        <div className="motion-badge motion-badge-6">📋</div>
+        <div className="motion-badge motion-badge-7">⚖️</div>
+        <div className="motion-badge motion-badge-8">📰</div>
+        <div className="motion-badge motion-badge-9">📈</div>
+        <div className="motion-badge motion-badge-10">🎯</div>
+      </div>
       {/* Background blobs */}
       <div className="landing-blob blob-1" />
       <div className="landing-blob blob-2" />
@@ -62,6 +82,11 @@ export default function LandingPage({ onLogin, loading }) {
 
       {/* Hero */}
       <section className="landing-hero">
+        {authError && (
+          <div className="landing-auth-error">
+            ⚠️ {authError}
+          </div>
+        )}
         <div className="landing-badge">🇮🇳 Built for Indian Democracy</div>
         <h1 className="landing-title">
           Your Intelligent Guide to<br />

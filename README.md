@@ -87,6 +87,59 @@ The quiz logic is designed not just to test, but to **teach**. Every answer trig
 
 ---
 
+## 🚀 Getting Started
+
+### Prerequisites
+- Node.js (v20 or higher)
+- npm or yarn
+- Google Gemini API Key ([Get one here](https://aistudio.google.com/app/apikey))
+- Firebase Project (for authentication)
+
+### Installation
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/ShreyashChaugule-github/ElectionIQ.git
+   cd ElectionIQ
+   ```
+
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+
+3. Set up environment variables:
+   - Copy `.env.example` to `.env`:
+     ```bash
+     cp .env.example .env
+     ```
+   - Fill in your API keys in `.env`:
+     - `GOOGLE_GEMINI_API_KEY`: Your Google Gemini API key
+     - `VITE_FIREBASE_API_KEY`: Your Firebase API key
+     - `PORT`: Backend server port (default: 4000)
+
+4. Start the development server:
+   ```bash
+   npm run dev
+   ```
+
+5. In another terminal, start the backend:
+   ```bash
+   npm run server
+   ```
+
+### Testing
+Run the test suite:
+```bash
+npm test
+```
+
+Generate coverage report:
+```bash
+npm run coverage
+```
+
+---
+
 ## 🏗️ Architecture
 
 ```mermaid

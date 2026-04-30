@@ -1,7 +1,8 @@
 import { auth } from '../config/firebase.js';
 
 export const verifyToken = async (req, res, next) => {
-  const token = req.headers.authorization?.split('Bearer ')[1];
+  const authHeader = req.headers.authorization;
+  const token = authHeader && authHeader.startsWith('Bearer ') ? authHeader.slice(7) : null;
 
   if (!token) {
     // For this hackathon, we allow anonymous chat but identify users if token is present

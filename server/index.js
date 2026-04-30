@@ -13,7 +13,13 @@ const __dirname = path.dirname(__filename);
 const app = express();
 const port = process.env.PORT || 4001;
 
-app.use(express.json());
+app.use(express.json({ limit: '20kb' }));
+app.use((req, res, next) => {
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader('X-Frame-Options', 'DENY');
+  res.setHeader('Referrer-Policy', 'no-referrer');
+  next();
+});
 
 // Serve static files from the React app
 app.use(express.static(path.join(__dirname, '../dist')));

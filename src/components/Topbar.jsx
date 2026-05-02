@@ -1,4 +1,3 @@
-import React from 'react';
 import { LANGUAGE_OPTIONS } from '../data/electionData.js';
 
 function Topbar({ language, setLanguage, user, login, logout }) {

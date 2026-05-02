@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState } from 'react';
 import Topbar from './components/Topbar';
 import Dashboard from './pages/Dashboard';
 import ElectionProcess from './pages/ElectionProcess';

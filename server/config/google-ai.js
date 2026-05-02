@@ -19,7 +19,7 @@ const MODEL_FALLBACKS = [
 ];
 
 const GENERATION_CONFIG = {
-  maxOutputTokens: 8192,
+  maxOutputTokens: 256,
   temperature: 0.2,
 };
 

@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useEffect } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import { QUIZ } from '../data/electionData.js';
 import confetti from 'canvas-confetti';
 

@@ -1,4 +1,3 @@
-import React from 'react';
 import { TIMELINE, FORMS } from '../data/electionData.js';
 
 function ElectionProcess({ onFormClick, onRoadmapClick }) {

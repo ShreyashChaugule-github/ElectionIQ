@@ -30,3 +30,22 @@ it('calls setLanguage when selecting a new language', async () => {
 
   expect(setLanguage).toHaveBeenCalledWith('hi');
 });
+
+it('calls login when the login button is clicked', async () => {
+  const login = vi.fn();
+
+  render(<Topbar language="en" setLanguage={() => {}} user={null} login={login} logout={() => {}} />);
+
+  await userEvent.click(screen.getByRole('button', { name: /login/i }));
+  expect(login).toHaveBeenCalled();
+});
+
+it('calls logout when the logout button is clicked', async () => {
+  const logout = vi.fn();
+  const mockUser = { displayName: 'Test User', photoURL: 'avatar.png' };
+
+  render(<Topbar language="en" setLanguage={() => {}} user={mockUser} login={() => {}} logout={logout} />);
+
+  await userEvent.click(screen.getByRole('button', { name: /logout/i }));
+  expect(logout).toHaveBeenCalled();
+});

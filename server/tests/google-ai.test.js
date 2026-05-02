@@ -48,8 +48,8 @@ describe('google-ai generateResponse', () => {
 
     expect(response).toBe('fallback response');
     expect(mockGetGenerativeModel).toHaveBeenCalledTimes(2);
-    expect(mockGetGenerativeModel.mock.calls[0][0].model).toBe('gemini-3.1-flash-lite-preview');
-    expect(mockGetGenerativeModel.mock.calls[1][0].model).toBe('gemini-2.0-flash-001');
+    expect(mockGetGenerativeModel.mock.calls[0][0].model).toBe('gemini-2.0-flash-001');
+    expect(mockGetGenerativeModel.mock.calls[1][0].model).toBe('gemini-1.5-flash');
   });
 
   it('returns fallback message when all models fail', async () => {

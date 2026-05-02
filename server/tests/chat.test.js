@@ -58,16 +58,41 @@ describe('chat controller', () => {
     expect(json).toHaveBeenCalledWith({ error: 'Prompt must be 2000 characters or less.' });
   });
 
-  it('generates AI response and returns JSON text', async () => {
-    mockGet.mockResolvedValueOnce({ exists: true, data: () => ({ progress: { roadmapStep: 'Start' } }) });
-    mockGet.mockResolvedValueOnce({ exists: true, data: () => ({ content: 'Election guideline content' }) });
+  it('generates AI response and returns JSON text for anonymous users without saving chat history', async () => {
+    mockGet.mockResolvedValueOnce({ exists: false, data: () => ({}) });
+    mockGet.mockRejectedValueOnce(new Error('Firestore unavailable'));
 
-    const req = { body: { prompt: 'What is voting?' }, user: { uid: 'user123' } };
+    const req = { body: { prompt: 'What is voting?' } };
     const { res, json } = buildResponse();
 
     await handleChat(req, res);
 
     expect(mockGenerateResponse).toHaveBeenCalled();
+    expect(mockAdd).not.toHaveBeenCalled();
     expect(json).toHaveBeenCalledWith({ text: 'ai response' });
+  });
+
+  it('returns a readable error message for rate limiting', async () => {
+    mockGenerateResponse.mockRejectedValueOnce({ status: 429, message: 'Too many requests' });
+
+    const req = { body: { prompt: 'Rate limit test' }, user: { uid: 'user429' } };
+    const { res, json } = buildResponse();
+
+    await handleChat(req, res);
+
+    expect(res.status).toHaveBeenCalledWith(429);
+    expect(json).toHaveBeenCalledWith({ error: 'Too many requests. Please wait a moment before asking another question.' });
+  });
+
+  it('returns a configuration error message when API key is missing', async () => {
+    mockGenerateResponse.mockRejectedValueOnce({ message: 'Missing API_KEY in environment' });
+
+    const req = { body: { prompt: 'Config test' }, user: { uid: 'user500' } };
+    const { res, json } = buildResponse();
+
+    await handleChat(req, res);
+
+    expect(res.status).toHaveBeenCalledWith(500);
+    expect(json).toHaveBeenCalledWith({ error: 'There is a configuration issue with the AI service. Please contact support.' });
   });
 });

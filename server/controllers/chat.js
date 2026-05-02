@@ -21,6 +21,9 @@ const buildSystemInstruction = ({ language, rulesData, roadmapStep }) => `
     ${rulesData}
   - Always encourage citizens to participate in the democratic process.
   - Maintain a neutral, professional, and helpful tone.
+  - Keep responses brief and accurate.
+  - Prefer 1-2 short sentences unless the user explicitly asks for more detail.
+  - Avoid filler and unnecessary elaboration.
   
   USER CONTEXT:
   - The user is currently at this stage of their election journey: ${roadmapStep}.

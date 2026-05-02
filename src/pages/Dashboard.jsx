@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { STATS, PARTIES, BOTS } from '../data/electionData.js';
 
 function Dashboard() {

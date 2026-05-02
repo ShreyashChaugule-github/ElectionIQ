@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { AI_SUGGESTIONS } from '../data/electionData.js';
 
 function AIAssistant({ chatMessages, chatInput, setChatInput, handleChatSubmit, chatLoading, handleSuggestion }) {

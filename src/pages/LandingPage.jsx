@@ -45,6 +45,7 @@ export default function LandingPage({ onLogin, loading, authError }) {
     event.currentTarget.style.setProperty('--pointer-y', `${y}%`);
   };
 
+  // eslint-disable-next-line jsx-a11y/no-static-element-interactions
   return (
     <div className="landing" onMouseMove={handlePointerMove}>
       <div className="landing-motion">
@@ -143,9 +144,11 @@ export default function LandingPage({ onLogin, loading, authError }) {
       <section className="landing-features">
         <h2 className="landing-section-title">Everything you need to participate</h2>
         <div className="landing-features-grid">
-          {features.map((f, i) => (
-            <div
-              key={f.title}
+          {features.map((f, i) => {
+            // eslint-disable-next-line jsx-a11y/no-static-element-interactions
+            return (
+              <div
+                key={f.title}
               className={`landing-feature-card ${hovered === i ? 'hovered' : ''}`}
               onMouseEnter={() => setHovered(i)}
               onMouseLeave={() => setHovered(null)}
@@ -155,7 +158,8 @@ export default function LandingPage({ onLogin, loading, authError }) {
               <h3 className="landing-feature-title">{f.title}</h3>
               <p className="landing-feature-desc">{f.desc}</p>
             </div>
-          ))}
+            );
+          })}
         </div>
       </section>
 

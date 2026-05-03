@@ -7,11 +7,8 @@ import Quiz from './pages/Quiz';
 import Modal from './components/Modal';
 import { 
   LANGUAGE_LABELS, 
-  QUIZ, 
   FIRST_VOTE_ROADMAP, 
-  FORM_ROADMAPS, 
-  BOTS, 
-  STATS 
+  FORM_ROADMAPS
 } from './data/electionData.js';
 
 import { useAuth } from './hooks/useAuth';
@@ -61,7 +58,7 @@ function App() {
         },
       ]);
     }
-  }, []);
+  }, [chatMessages.length]);
 
   const handleChatSubmit = async (customPrompt) => {
     const prompt = customPrompt?.trim() ?? chatInput.trim();
@@ -145,7 +142,7 @@ function App() {
         logout={logout}
       />
 
-      <nav className="tabs" role="tablist">
+      <div className="tabs" role="tablist" aria-label="Application Tabs">
         {TABS.map((tab, index) => (
           <button
             key={tab}
@@ -160,7 +157,7 @@ function App() {
             {tab}
           </button>
         ))}
-      </nav>
+      </div>
 
       <main className="panels">
         <div 

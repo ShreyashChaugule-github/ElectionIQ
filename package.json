@@ -9,7 +9,8 @@
     "preview": "vite preview",
     "server": "node server/index.js",
     "test": "vitest run",
-    "coverage": "vitest run --coverage"
+    "coverage": "vitest run --coverage",
+    "lint": "eslint ."
   },
   "dependencies": {
     "@google-cloud/vertexai": "^1.12.0",
@@ -28,7 +29,12 @@
     "@testing-library/react": "^14.0.0",
     "@testing-library/user-event": "^14.0.0",
     "@vitejs/plugin-react": "^6.0.1",
+    "@vitest/coverage-v8": "^4.1.5",
     "cssnano": "^6.0.0",
+    "eslint": "^9.39.4",
+    "eslint-plugin-jsx-a11y": "^6.10.2",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^7.1.1",
     "jsdom": "^29.1.0",
     "vite": "^8.0.10",
     "vitest": "^4.1.5"

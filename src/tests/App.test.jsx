@@ -133,7 +133,7 @@ it('submits a chat message and renders the AI response', async () => {
   }));
 });
 
-it('switches to AI Assistant when suggestion chip is clicked from the process tab', async () => {
+it('opens the roadmap modal when a form card is clicked from the process tab', async () => {
   const mockUser = { displayName: 'Test User', photoURL: 'avatar.png', getIdToken: vi.fn().mockResolvedValue('token') };
   useAuth.mockReturnValue({
     user: mockUser,
@@ -143,19 +143,15 @@ it('switches to AI Assistant when suggestion chip is clicked from the process ta
     logout: vi.fn(),
   });
 
-  global.fetch.mockResolvedValue({
-    ok: true,
-    json: async () => ({ text: 'AI response from suggestion' }),
-  });
-
   render(<App />);
 
   await userEvent.click(screen.getByRole('tab', { name: /Process/i }));
   const formButtons = screen.getAllByRole('button', { name: /Learn about/i });
   await userEvent.click(formButtons[0]);
 
-  await waitFor(() => expect(screen.getByPlaceholderText(/Ask about voting/i)).toBeInTheDocument());
-  expect(global.fetch).toHaveBeenCalled();
+  const dialog = await screen.findByRole('dialog');
+  expect(dialog).toBeInTheDocument();
+  expect(dialog).toHaveTextContent(/Detailed Guide|Information|Learn More/i);
 });
 
 it('shows a friendly error message when the AI endpoint returns a failure', async () => {

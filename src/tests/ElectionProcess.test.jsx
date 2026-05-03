@@ -16,13 +16,13 @@ it('renders election process content and handles roadmap button click', async ()
   expect(onRoadmapClick).toHaveBeenCalledWith('First Vote');
 });
 
-it('calls onFormClick when an election form card is clicked', async () => {
-  const onFormClick = vi.fn();
+it('calls onRoadmapClick when an election form card is clicked', async () => {
+  const onRoadmapClick = vi.fn();
 
-  render(<ElectionProcess onFormClick={onFormClick} onRoadmapClick={() => {}} />);
+  render(<ElectionProcess onFormClick={() => {}} onRoadmapClick={onRoadmapClick} />);
 
   const formButtons = screen.getAllByRole('button', { name: /Learn about/i });
   await userEvent.click(formButtons[0]);
 
-  expect(onFormClick).toHaveBeenCalledTimes(1);
+  expect(onRoadmapClick).toHaveBeenCalledTimes(1);
 });

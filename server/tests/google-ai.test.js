@@ -9,7 +9,7 @@ const mockGetGenerativeModel = vi.fn(({ model }) => ({
   model,
   generateContent: mockGenerateContent,
 }));
-const mockGoogleGenerativeAI = vi.fn(function (apiKey) {
+const mockGoogleGenerativeAI = vi.fn(function () {
   return {
     getGenerativeModel: mockGetGenerativeModel,
   };

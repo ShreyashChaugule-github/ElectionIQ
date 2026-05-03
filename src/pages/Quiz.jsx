@@ -1,4 +1,4 @@
-import { useMemo, useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { QUIZ } from '../data/electionData.js';
 import confetti from 'canvas-confetti';
 
@@ -6,6 +6,10 @@ function Quiz() {
   const [quizIndex, setQuizIndex] = useState(0);
   const [quizAnswers, setQuizAnswers] = useState(Array(QUIZ.length).fill(undefined));
   const [quizFinished, setQuizFinished] = useState(false);
+
+  const quizScore = quizAnswers.reduce((acc, ans, idx) => {
+    return ans === QUIZ[idx].ans ? acc + 1 : acc;
+  }, 0);
 
   useEffect(() => {
     if (quizFinished) {
@@ -19,13 +23,7 @@ function Quiz() {
         });
       }
     }
-  }, [quizFinished]);
-
-  const quizScore = useMemo(() => {
-    return quizAnswers.reduce((acc, ans, idx) => {
-      return ans === QUIZ[idx].ans ? acc + 1 : acc;
-    }, 0);
-  }, [quizAnswers]);
+  }, [quizFinished, quizScore]);
 
   const handleAnswer = (optionIndex) => {
     if (quizFinished || quizAnswers[quizIndex] !== undefined) return;
